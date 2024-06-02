@@ -26,13 +26,19 @@ let persons = [
 
 app.use(express.json());
 
-//request the notes
+//request all the persons
 
 app.get("/api/persons", (request, response) => {
   response.json(persons);
 });
 
-//request an individual note
+app.get("/api/info", (request, response) => {
+  let numOfElements = persons.length;
+  let result = `<h1>${new Date().toLocaleString()} <br/>Number of elements:${numOfElements}</h1>`;
+  response.send(result);
+});
+
+//request a person
 
 app.get("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
@@ -41,17 +47,22 @@ app.get("/api/persons/:id", (request, response) => {
   if (person) {
     response.json(person);
   } else {
-    response.statusMessage = "That person doesn't exist";
-    response.status(404).end();
+    response.statusMessage = "Error 404: That person doesn't exist";
+    response.status(404).send(`<h1>${response.statusMessage}</h1>`);
   }
 });
 
-//add a note
+//add a person
 
 const generateId = () => {
-  const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
-  return maxId + 1;
+  //const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
+  const maxId = persons.length > 0 ? getRandomArbitrary(1,10000) : 0;
+  return maxId;
 };
+
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
@@ -59,10 +70,18 @@ app.post("/api/persons", (request, response) => {
   if (!body.name || !body.number) {
     return response.status(400).json({
       error: "name or number missing",
-    });
+    }) ;
+  } else if (body.name) {
+    for(i=0;i<persons.length;i++){
+      if(persons[i].name===body.name){
+        return response.status(400).json({
+        error: "name must be unique"
+      }) ;
+      }
+    } 
   }
 
-  //añadir else if!
+
 
   const person = {
     name: body.name,
@@ -76,7 +95,7 @@ app.post("/api/persons", (request, response) => {
   response.json(person);
 });
 
-//delete a note
+//delete a person
 
 app.delete("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
