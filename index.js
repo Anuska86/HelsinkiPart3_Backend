@@ -4,7 +4,7 @@ var fs = require("fs");
 var morgan = require("morgan");
 var path = require("path");
 
-let persons = [
+let phones = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -40,37 +40,37 @@ app.use(
   )
 );
 
-//request all the persons
+//request all the phones
 
-app.get("/api/persons", (request, response) => {
-  response.json(persons);
+app.get("/api/phones", (request, response) => {
+  response.json(phones);
 });
 
 app.get("/api/info", (request, response) => {
-  let numOfElements = persons.length;
+  let numOfElements = phones.length;
   let result = `<h1>Current date: ${new Date().toLocaleString()} <br/>Number of elements:${numOfElements}</h1>`;
   response.send(result);
 });
 
-//request a person
+//request a single phone
 
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/phones/:id", (request, response) => {
   const id = Number(request.params.id);
-  const person = persons.find((person) => person.id === id);
+  const phone = phones.find((phone) => phone.id === id);
 
-  if (person) {
-    response.json(person);
+  if (phone) {
+    response.json(phone);
   } else {
-    response.statusMessage = "Error 404: That person doesn't exist";
+    response.statusMessage = "Error 404: That phone doesn't exist";
     response.status(404).send(`<h1>${response.statusMessage}</h1>`);
   }
 });
 
-//add a person
+//add a new phone
 
 const generateId = () => {
   //const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
-  const maxId = persons.length > 0 ? getRandomArbitrary(1, 10000) : 0;
+  const maxId = phones.length > 0 ? getRandomArbitrary(1, 10000) : 0;
   return maxId;
 };
 
@@ -78,7 +78,7 @@ function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-app.post("/api/persons", (request, response) => {
+app.post("/api/phones", (request, response) => {
   const body = request.body;
 
   if (!body.name || !body.number) {
@@ -86,8 +86,8 @@ app.post("/api/persons", (request, response) => {
       error: "name or number missing",
     });
   } else if (body.name) {
-    for (i = 0; i < persons.length; i++) {
-      if (persons[i].name === body.name) {
+    for (i = 0; i < phones.length; i++) {
+      if (phones[i].name === body.name) {
         return response.status(400).json({
           error: "name must be unique",
         });
@@ -95,28 +95,28 @@ app.post("/api/persons", (request, response) => {
     }
   }
 
-  const person = {
+  const phone = {
     name: body.name,
     number: body.number,
     important: Boolean(body.important) || false,
     id: generateId(),
   };
 
-  persons = persons.concat(person);
+phones = phones.concat(phone);
 
-  response.json(person);
+  response.json(phone);
 });
 
-//delete a person
+//delete a phone
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/phones/:id", (request, response) => {
   const id = Number(request.params.id);
-  persons = persons.filter((person) => person.id !== id);
+  phones = phones.filter((phone) => phone.id !== id);
 
   response.status(204).end();
 });
 
 const PORT = 3001;
 app.listen(PORT, () => {
-  console.log(`Server running on port http://localhost:${PORT}/api/persons`);
+  console.log(`Server running on port http://localhost:${PORT}/api/phones`);
 });
