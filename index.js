@@ -3,29 +3,36 @@ const app = express();
 var fs = require("fs");
 var morgan = require("morgan");
 var path = require("path");
+const cors = require('cors')
 
 let phones = [
   {
     id: 1,
     name: "Arto Hellas",
     number: "040-123456",
+    important:true
   },
   {
     id: 2,
     name: "Ada Lovelace",
     number: "39-44-5323523",
+    important:true
   },
   {
     id: 3,
     name: "Dan Abramov",
     number: "12-43-234345",
+    important:true
   },
   {
     id: 4,
     name: "Mary Poppendieck",
     number: "39-23-6423122",
+    important:true
   },
 ];
+
+app.use(cors())
 
 app.use(express.json());
 
