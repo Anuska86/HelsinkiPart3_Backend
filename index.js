@@ -49,6 +49,11 @@ app.use(
 
 //request all the phones
 
+app.get("/", (request, response) => {
+  response.send('<h1>Hello</h1>');
+});
+
+
 app.get("/api/phones", (request, response) => {
   response.json(phones);
 });
