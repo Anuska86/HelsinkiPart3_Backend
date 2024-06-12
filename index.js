@@ -50,7 +50,7 @@ app.use(
 //request all the phones
 
 app.get("/", (request, response) => {
-  response.send('<h1>Hello</h1>');
+  response.send('<h1>Phonebook</h1>');
 });
 
 
