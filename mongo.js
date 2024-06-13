@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 var config = require('./config.json');
 console.log(config);
 
-const url = `mongodb+srv://${config.MONGO_USER}:${config.MONGO_PASSWORD}@cluster0.sw7wgdz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const url = `mongodb+srv://${config.MONGO_USER}:${config.MONGO_PASSWORD}@cluster0.sw7wgdz.mongodb.net/phoneApp?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose.set("strictQuery", false);
 
