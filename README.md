@@ -10,6 +10,8 @@ install morgan npm install morgan
 
 moongose npm install mongoose
 
+npm install mongodb
+
 start: node index.js or npm start
 
 start nodemon npm run dev
