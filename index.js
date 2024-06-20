@@ -3,40 +3,41 @@ const app = express();
 var fs = require("fs");
 var morgan = require("morgan");
 var path = require("path");
-const cors = require('cors')
+const cors = require("cors");
+const Phone = require("./models/phone");
 
 let phones = [
   {
     id: 1,
     name: "Arto Hellas",
     number: "040-123456",
-    important:true
+    important: true,
   },
   {
     id: 2,
     name: "Ada Lovelace",
     number: "39-44-5323523",
-    important:true
+    important: true,
   },
   {
     id: 3,
     name: "Dan Abramov",
     number: "12-43-234345",
-    important:true
+    important: true,
   },
   {
     id: 4,
     name: "Mary Poppendieck",
     number: "39-23-6423122",
-    important:true
+    important: true,
   },
 ];
 
-app.use(cors())
+app.use(cors());
 
 app.use(express.json());
 
-app.use(express.static('dist'))
+app.use(express.static("dist"));
 
 app.use(morgan("tiny"));
 
@@ -52,12 +53,13 @@ app.use(
 //request all the phones
 
 app.get("/", (request, response) => {
-  response.send('<h1>Phonebook</h1>');
+  response.send("<h1>Phonebook</h1>");
 });
 
-
 app.get("/api/phones", (request, response) => {
-  response.json(phones);
+  Phone.find({}).then((phones) => {
+    response.json(phones);
+  });
 });
 
 app.get("/api/info", (request, response) => {
@@ -116,7 +118,7 @@ app.post("/api/phones", (request, response) => {
     id: generateId(),
   };
 
-phones = phones.concat(phone);
+  phones = phones.concat(phone);
 
   response.json(phone);
 });
@@ -130,7 +132,7 @@ app.delete("/api/phones/:id", (request, response) => {
   response.status(204).end();
 });
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}/api/phones`);
 });
