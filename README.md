@@ -1,6 +1,7 @@
 # HelsinkiPart3
+INSTALL: 
 
-new template: npm init
+
 
 install express npm install express
 
@@ -12,11 +13,17 @@ moongose npm install mongoose
 
 npm install mongodb
 
+npm install dotenv
+
+LAUNCH: 
+
+new template: npm init
+
 start: node index.js or npm start
 
 start nodemon npm run dev
 
-Mongo: node mongo.js 
+start Mongo: node mongo.js 
 
 LINK https://helsinkipart3-backend.onrender.com/
 

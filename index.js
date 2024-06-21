@@ -1,13 +1,12 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
-var fs = require("fs");
 var morgan = require("morgan");
-var path = require("path");
 const cors = require("cors");
 const Phone = require("./models/phone");
 
 let phones = [
-  {
+  /*{
     id: 1,
     name: "Arto Hellas",
     number: "040-123456",
@@ -30,7 +29,7 @@ let phones = [
     name: "Mary Poppendieck",
     number: "39-23-6423122",
     important: true,
-  },
+  },*/
 ];
 
 app.use(cors());
@@ -70,7 +69,13 @@ app.get("/api/info", (request, response) => {
 
 //request a single phone
 
-app.get("/api/phones/:id", (request, response) => {
+app.get("/api/phones/", (request, response) => {
+  Phone.find({}).then((phones) => {
+    response.json(phones);
+  });
+});
+
+app.get("/api/phones/:id", (resquest, response) => {
   const id = Number(request.params.id);
   const phone = phones.find((phone) => phone.id === id);
 
@@ -111,16 +116,16 @@ app.post("/api/phones", (request, response) => {
     }
   }
 
-  const phone = {
+  const phone = new Phone({
     name: body.name,
     number: body.number,
     important: Boolean(body.important) || false,
     id: generateId(),
-  };
+  });
 
-  phones = phones.concat(phone);
-
-  response.json(phone);
+  phone.save().then((savedPhone) => {
+    response.json(savedPhone);
+  });
 });
 
 //delete a phone
@@ -132,7 +137,7 @@ app.delete("/api/phones/:id", (request, response) => {
   response.status(204).end();
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}/api/phones`);
 });

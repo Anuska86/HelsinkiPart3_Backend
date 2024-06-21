@@ -1,7 +1,7 @@
 POST http://localhost:3001/api/phones
 Content-Type: application/json
 
-{
-    "content":"VS code rest client is a pretty handy tool",
+{  
+    "content":"Still works!!!",
     "important": true
 }
