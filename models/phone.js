@@ -32,7 +32,7 @@ function getData() {
     result.forEach((phone) => {
       console.log("Tag:" + phone);
     });
-    mongoose.connection.close();
+    //mongoose.connection.close();
   });
 }
 

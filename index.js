@@ -4,9 +4,11 @@ const app = express();
 var morgan = require("morgan");
 const cors = require("cors");
 const Phone = require("./models/phone");
+const mongoService = require("./mongo");
 
+/*
 let phones = [
-  /*{
+  {
     id: 1,
     name: "Arto Hellas",
     number: "040-123456",
@@ -29,9 +31,9 @@ let phones = [
     name: "Mary Poppendieck",
     number: "39-23-6423122",
     important: true,
-  },*/
+  },
 ];
-
+*/
 app.use(cors());
 
 app.use(express.json());
@@ -51,12 +53,21 @@ app.use(
 
 //request all the phones
 
-app.get("/", (request, response) => {
-  response.send("<h1>Phonebook</h1>");
+app.get("/", async (request, response) => {
+  let retrievedData =  await mongoService.getData();
+  response.json(retrievedData);
 });
 
 app.get("/api/phones", (request, response) => {
   Phone.find({}).then((phones) => {
+    response.json(phones);
+  });
+});
+
+//resquest favourites numbers
+
+app.get("/api/phones/favourites", (request, response) => {
+  Phone.find({"important":true}).then((phones) => {
     response.json(phones);
   });
 });
