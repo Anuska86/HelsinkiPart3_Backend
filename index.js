@@ -5,7 +5,7 @@ var morgan = require("morgan");
 const cors = require("cors");
 const Phone = require("./models/phone");
 const mongoService = require("./mongo");
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
 /*
 let phones = [
@@ -55,7 +55,7 @@ app.use(
 //request all the phones
 
 app.get("/", async (request, response) => {
-  let retrievedData =  await mongoService.getData();
+  let retrievedData = await mongoService.getData();
   response.json(retrievedData);
 });
 
@@ -68,7 +68,7 @@ app.get("/api/phones", (request, response) => {
 //resquest favourites numbers
 
 app.get("/api/phones/favourites", (request, response) => {
-  Phone.find({"important":true}).then((phones) => {
+  Phone.find({ important: true }).then((phones) => {
     response.json(phones);
   });
 });
@@ -107,12 +107,12 @@ function getRandomArbitrary(min, max) {
 
 app.post("/api/phones", (request, response) => {
   const body = request.body;
-  
+
   if (!body.name || !body.phone) {
     return response.status(400).json({
       error: "name or number missing",
     });
-  } 
+  }
   /*
   else if (body.name) {
     for (i = 0; i < phones.length; i++) {
@@ -131,7 +131,7 @@ app.post("/api/phones", (request, response) => {
     important: body.important,
     _id: new mongoose.Types.ObjectId(),
   });
-  console.log(phone)
+
   phone.save().then((savedPhone) => {
     response.json(savedPhone);
   });
