@@ -5,6 +5,7 @@ var morgan = require("morgan");
 const cors = require("cors");
 const Phone = require("./models/phone");
 const mongoService = require("./mongo");
+var mongoose = require('mongoose');
 
 /*
 let phones = [
@@ -100,24 +101,20 @@ app.get("/api/phones/:id", (resquest, response) => {
 
 //add a new phone
 
-const generateId = () => {
-  //const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
-  const maxId = phones.length > 0 ? getRandomArbitrary(1, 10000) : 0;
-  return maxId;
-};
-
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
 
 app.post("/api/phones", (request, response) => {
   const body = request.body;
-
-  if (!body.name || !body.number) {
+  
+  if (!body.name || !body.phone) {
     return response.status(400).json({
       error: "name or number missing",
     });
-  } else if (body.name) {
+  } 
+  /*
+  else if (body.name) {
     for (i = 0; i < phones.length; i++) {
       if (phones[i].name === body.name) {
         return response.status(400).json({
@@ -126,17 +123,19 @@ app.post("/api/phones", (request, response) => {
       }
     }
   }
+  */
 
   const phone = new Phone({
     name: body.name,
-    number: body.number,
-    important: Boolean(body.important) || false,
-    id: generateId(),
+    number: body.phone,
+    important: body.important,
+    _id: new mongoose.Types.ObjectId(),
   });
-
+  console.log(phone)
   phone.save().then((savedPhone) => {
     response.json(savedPhone);
   });
+  return true;
 });
 
 //delete a phone
