@@ -113,17 +113,6 @@ app.post("/api/phones", (request, response) => {
       error: "name or number missing",
     });
   }
-  /*
-  else if (body.name) {
-    for (i = 0; i < phones.length; i++) {
-      if (phones[i].name === body.name) {
-        return response.status(400).json({
-          error: "name must be unique",
-        });
-      }
-    }
-  }
-  */
 
   const phone = new Phone({
     name: body.name,
@@ -134,8 +123,11 @@ app.post("/api/phones", (request, response) => {
 
   phone.save().then((savedPhone) => {
     response.json(savedPhone);
+    return true;
+  }).catch(error =>{
+    return response.status(400).send({'error':'There was an error'})
   });
-  return true;
+  
 });
 
 //delete a phone
