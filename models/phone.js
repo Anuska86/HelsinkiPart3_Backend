@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
 const url = process.env.MONGODB_URI;
-let phoneData= {};
+let phoneData = {};
 
 console.log("connecting to", url);
 mongoose
@@ -19,8 +19,20 @@ mongoose
 
 const phoneSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  number: {
+    type: String,
+    validate:   {
+      validator: function(v) {
+        return /^\d{2,3}-\d{3,}/.test(v);
+      },
+      message: props => `${props.value} is not a valid phone number!`
+    }
+    },
   important: Boolean,
 });
 
